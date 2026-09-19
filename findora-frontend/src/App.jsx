@@ -20,6 +20,8 @@ import ProfilePage from './pages/dashboard/ProfilePage';
 
 // Admin
 import AdminDashboard from './pages/admin/AdminDashboard';
+import EnhancedDashboard from './pages/admin/EnhancedDashboard';
+import CaseManagement from './pages/admin/CaseManagement';
 
 // Protected Route
 function ProtectedRoute({ children }) {
@@ -57,6 +59,8 @@ function App() {
         <Route path="rewards" element={<RewardsPage />} />
         <Route path="profile" element={<ProfilePage />} />
         <Route path="admin" element={<AdminDashboard />} />
+        <Route path="admin/dashboard" element={<EnhancedDashboard />} />
+        <Route path="admin/cases" element={<CaseManagement />} />
       </Route>
       
       {/* Fallback */}

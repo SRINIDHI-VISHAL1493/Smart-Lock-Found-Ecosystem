@@ -1,7 +1,7 @@
 // src/lib/api.js - Axios API client
 import axios from 'axios';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
 
 const api = axios.create({
   baseURL: API_URL,
@@ -136,8 +136,8 @@ export const adminAPI = {
   
   // Audit Logs
   getAuditLogs: () => api.get('/admin/audit-logs'),
-  unblockUser: (uid) => api.post(`/admin/users/${uid}/unblock`),
-  getAuditLogs: () => api.get('/admin/audit-logs'),
+  
+  // Legacy analytics (kept for backward compatibility)
   getAllReports: () => api.get('/admin/reports'),
   getCategoryAnalytics: () => api.get('/admin/analytics/categories'),
   getTimelineAnalytics: () => api.get('/admin/analytics/timeline'),

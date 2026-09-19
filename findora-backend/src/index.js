@@ -38,6 +38,7 @@ app.use('/api/matches', require('./routes/matches'));
 app.use('/api/lockers', require('./routes/lockers'));
 app.use('/api/notifications', require('./routes/notifications'));
 app.use('/api/chat', require('./routes/chat'));
+app.use('/api/rewards', require('./routes/rewards'));
 app.use('/api/admin', require('./routes/admin'));
 app.use('/api/iot', require('./routes/iot'));
 

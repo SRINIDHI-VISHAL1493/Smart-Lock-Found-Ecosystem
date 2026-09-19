@@ -160,7 +160,12 @@ router.post('/', authenticate, (req, res) => {
     }
   });
 
-  res.status(201).json({ report, message: 'Report created. AI is analyzing for matches.' });
+  res.status(201).json({ 
+    report, 
+    fraudAssessment,
+    pointsAwarded: points,
+    message: 'Report created. AI is analyzing for matches.' 
+  });
 });
 
 // PUT /api/reports/:id
