@@ -256,6 +256,8 @@ const demoNotifications = {};
 const demoChats = {};
 const demoChatMessages = {};
 const demoAuditLogs = {};
+const demoFraudAssessments = {};
+const demoPointsTransactions = {};
 
 // ─── Store Operations ──────────────────────────────────────────
 const store = {
@@ -268,6 +270,8 @@ const store = {
   chats: { ...demoChats },
   chatMessages: { ...demoChatMessages },
   auditLogs: { ...demoAuditLogs },
+  fraudAssessments: { ...demoFraudAssessments },
+  pointsTransactions: { ...demoPointsTransactions },
 
   // Users
   getUser: (uid) => store.users[uid] || null,
@@ -377,6 +381,25 @@ const store = {
     return store.auditLogs[id];
   },
   getAuditLogs: () => Object.values(store.auditLogs).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)),
+
+  // Fraud Assessments
+  addFraudAssessment: (data) => {
+    const id = `fraud-${uuidv4().slice(0, 8)}`;
+    store.fraudAssessments[id] = { ...data, id };
+    return store.fraudAssessments[id];
+  },
+  getAllFraudAssessments: () => Object.values(store.fraudAssessments),
+  getFraudAssessment: (id) => store.fraudAssessments[id] || null,
+  getFraudAssessmentsByReport: (reportId) => Object.values(store.fraudAssessments).filter(a => a.reportId === reportId),
+
+  // Points Transactions
+  addPointsTransaction: (data) => {
+    const id = `txn-${uuidv4().slice(0, 8)}`;
+    store.pointsTransactions[id] = { ...data, id };
+    return store.pointsTransactions[id];
+  },
+  getPointsTransactions: (userId) => Object.values(store.pointsTransactions).filter(t => t.userId === userId).sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)),
+  getAllPointsTransactions: () => Object.values(store.pointsTransactions),
 
   // Stats
   getStats: () => {

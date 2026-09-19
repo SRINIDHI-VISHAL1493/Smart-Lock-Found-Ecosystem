@@ -4,6 +4,8 @@ const router = express.Router();
 const store = require('../config/demoStore');
 const { authenticate, requireRole } = require('../middleware/auth');
 const { findMatches } = require('../services/aiMatcher');
+const fraudDetection = require('../services/fraudDetection');
+const rewardsSystem = require('../services/rewardsSystem');
 const { v4: uuidv4 } = require('uuid');
 
 const VALID_CATEGORIES = ['electronics', 'bags', 'documents', 'keys', 'clothing', 'jewelry', 'sports', 'books', 'other'];
@@ -96,6 +98,10 @@ router.post('/', authenticate, (req, res) => {
   store.addAuditLog({ action: 'CREATE_REPORT', userId: req.user.uid, details: `${type.toUpperCase()} report created: ${title}`, reportId: report.id });
 
   // Award reward points
+  rewardsSystem.awardReportPoints(report);
+  
+  // Run fraud detection
+  const fraudAssessment = fraudDetection.detectFraud(report, req.user.uid);
   const points = type === 'found' ? REWARD_FOR_FOUND_REPORT : REWARD_FOR_LOST_REPORT;
   store.updateUser(req.user.uid, { rewardPoints: (req.user.rewardPoints || 0) + points });
 

@@ -94,10 +94,48 @@ export const chatAPI = {
 
 // ─── Admin API ────────────────────────────────────────────────
 export const adminAPI = {
+  // Dashboard
   getStats: () => api.get('/admin/stats'),
+  getDashboard: () => api.get('/admin/dashboard'),
+  
+  // Users
   getUsers: () => api.get('/admin/users'),
   updateUserRole: (uid, role) => api.put(`/admin/users/${uid}/role`, { role }),
   blockUser: (uid) => api.post(`/admin/users/${uid}/block`),
+  unblockUser: (uid) => api.post(`/admin/users/${uid}/unblock`),
+  
+  // Reports & Case Management
+  getReports: () => api.get('/admin/reports'),
+  updateReportStatus: (id, status) => api.put(`/admin/reports/${id}/status`, { status }),
+  flagReport: (id, reason) => api.post(`/admin/reports/${id}/flag`, { reason }),
+  unflagReport: (id) => api.post(`/admin/reports/${id}/unflag`),
+  deleteReport: (id, reason) => api.delete(`/admin/reports/${id}`, { data: { reason } }),
+  bulkAction: (reportIds, action, data) => api.post('/admin/reports/bulk-action', { reportIds, action, data }),
+  
+  // Fraud Detection
+  getFraudStats: () => api.get('/admin/fraud/stats'),
+  getHighRiskReports: (limit) => api.get('/admin/fraud/high-risk', { params: { limit } }),
+  getFraudAssessment: (reportId) => api.get(`/admin/fraud/assessment/${reportId}`),
+  scanReport: (reportId) => api.post(`/admin/fraud/scan/${reportId}`),
+  
+  // Rewards
+  getLeaderboard: (limit) => api.get('/admin/rewards/leaderboard', { params: { limit } }),
+  awardPoints: (userId, points, reason) => api.post('/admin/rewards/award', { userId, points, reason }),
+  deductPoints: (userId, points, reason) => api.post('/admin/rewards/deduct', { userId, points, reason }),
+  awardBadge: (userId, badgeId) => api.post('/admin/rewards/badge', { userId, badgeId }),
+  
+  // Analytics
+  getAnalyticsTrends: (days) => api.get('/admin/analytics/trends', { params: { days } }),
+  getCategoryAnalytics: () => api.get('/admin/analytics/categories'),
+  getAnalyticsGeographic: () => api.get('/admin/analytics/geographic'),
+  getAnalyticsMatches: () => api.get('/admin/analytics/matches'),
+  getAnalyticsEngagement: () => api.get('/admin/analytics/engagement'),
+  getAnalyticsTiming: () => api.get('/admin/analytics/timing'),
+  getAnalyticsBrands: () => api.get('/admin/analytics/brands'),
+  getAnalyticsActivityPattern: () => api.get('/admin/analytics/activity-pattern'),
+  
+  // Audit Logs
+  getAuditLogs: () => api.get('/admin/audit-logs'),
   unblockUser: (uid) => api.post(`/admin/users/${uid}/unblock`),
   getAuditLogs: () => api.get('/admin/audit-logs'),
   getAllReports: () => api.get('/admin/reports'),
