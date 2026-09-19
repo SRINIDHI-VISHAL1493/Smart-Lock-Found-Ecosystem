@@ -316,15 +316,29 @@ const store = {
 
   // Locker Sessions
   getLockerSession: (id) => store.lockerSessions[id] || null,
+  getLockerSessionByLocker: (lockerId) => Object.values(store.lockerSessions).find(s => s.lockerId === lockerId && s.state !== 'COMPLETED' && s.state !== 'CANCELLED'),
+  getLockerSessionByOTP: (otp) => Object.values(store.lockerSessions).find(s => s.otp === otp && s.state === 'ITEM_DEPOSITED'),
   createLockerSession: (data) => {
     const id = data.id || `session-${uuidv4().slice(0, 8)}`;
-    store.lockerSessions[id] = { ...data, id };
+    const otp = data.otp || Math.floor(100000 + Math.random() * 900000).toString();
+    const otpExpiry = new Date(Date.now() + 10 * 60000).toISOString(); // 10 minutes
+    store.lockerSessions[id] = { 
+      ...data, 
+      id, 
+      otp, 
+      otpExpiry,
+      otpAttempts: 0,
+      state: data.state || 'PENDING',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    };
     return store.lockerSessions[id];
   },
   updateLockerSession: (id, data) => {
     store.lockerSessions[id] = { ...store.lockerSessions[id], ...data, updatedAt: new Date().toISOString() };
     return store.lockerSessions[id];
   },
+  getAllLockerSessions: () => Object.values(store.lockerSessions),
 
   // Notifications
   createNotification: (data) => {
