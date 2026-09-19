@@ -319,11 +319,18 @@ function computeMatch(lostReport, foundReport) {
     reasons.push({ factor: 'brand', score: Math.round(brandS * MATCH_WEIGHTS.brand * 100), label: `Same brand (${lostReport.brand})` });
   }
 
-  // Color
-  const colorS = fieldMatch(lostReport.color, foundReport.color);
+  // Color (using advanced color similarity)
+  const colorS = lostReport.color && foundReport.color 
+    ? imageColorSimilarity(lostReport.color, foundReport.color)
+    : 0;
   scores.color = colorS;
   if (colorS > 0.4) {
-    reasons.push({ factor: 'color', score: Math.round(colorS * MATCH_WEIGHTS.color * 100), label: `Similar color (${lostReport.color} / ${foundReport.color})` });
+    const colorLabel = colorS === 1.0 ? 'Exact' : colorS >= 0.8 ? 'Same family' : 'Similar';
+    reasons.push({ 
+      factor: 'color', 
+      score: Math.round(colorS * MATCH_WEIGHTS.color * 100), 
+      label: `${colorLabel} color (${lostReport.color} / ${foundReport.color})` 
+    });
   }
 
   // Model
